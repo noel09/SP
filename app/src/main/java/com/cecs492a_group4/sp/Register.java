@@ -58,12 +58,28 @@ public class Register extends Activity {
 
                     @Override
                     public void onError(FirebaseError firebaseError) {
-                        email.setText("");
-                        email.setHintTextColor(Color.RED);
-                        email.setHint("Email Address Already Registered");
-                        password.setText("");
-                        passwordTwo.setText("");
-                        System.out.println("Failed to created user account with uid: ");
+                        switch (firebaseError.getCode()){
+                            case FirebaseError.EMAIL_TAKEN:
+                                email.setText("");
+                                email.setHintTextColor(Color.RED);
+                                email.setHint("Email Address Already Registered");
+                                password.setText("");
+                                passwordTwo.setText("");
+                                System.out.println("Failed to created user account Email already registered");
+                                break;
+                            case FirebaseError.INVALID_EMAIL:
+                                email.setText("");
+                                email.setHintTextColor(Color.RED);
+                                email.setHint("Email Address Invalid");
+                                password.setText("");
+                                passwordTwo.setText("");
+                                System.out.println("Failed to created user account invalid email");
+                                break;
+
+                        }
+
+
+
                     }
                 });
             }

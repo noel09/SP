@@ -105,7 +105,7 @@ public class SingleEvent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_event);
 
-        final PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
         // Register a listener to receive callbacks when a place has been selected or an error has
@@ -121,7 +121,7 @@ public class SingleEvent extends AppCompatActivity {
                 //test placing address into addressTemp
                 address = place.getAddress();
                 addressString = address.toString();
-                
+
                 //log to see if the address gets extracted //IT WORKS!!
                 //Log.d("test: ", addressTempString);
 
