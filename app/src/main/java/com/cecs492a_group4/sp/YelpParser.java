@@ -50,6 +50,8 @@ public class YelpParser {
         JSONObject o1 = new JSONObject(yelp_response);
         JSONArray businesses = o1.getJSONArray("businesses");
         String tmpString;
+        keys.removeAll(keys);
+        yelp_bundle.clear();
         for (int i = 0; businesses.length() > i; i++){
             tmpString = "yMobileUrl" + businesses.getJSONObject(i).get("mobile_url").toString() + "yRating" +
                     businesses.getJSONObject(i).get("rating").toString() + "yLocation" +

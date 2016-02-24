@@ -86,11 +86,11 @@ public class SingleEvent extends AppCompatActivity {
     String response;
     YelpParser yp = new YelpParser();
     URL newurl;
-    String activity, img_url, rating;
+    String activity, img_url, rating, htmlexample;
     Bitmap mIcon_val;
 
-    int limit;
-    Thread t1, t2;
+    int limit = 5;
+    Thread t1, t2, t3;
 
     //private TextView mPlaceDetailsText;
 
@@ -155,7 +155,8 @@ public class SingleEvent extends AppCompatActivity {
         //tv.setText(Html.fromHtml(htmlexample, null, null));
         generator.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                RandRestaurant = ran.nextInt(5);
+                RandRestaurant = ran.nextInt(limit);
+                yelp.setLimit(limit);
                 t1 = new Thread() {
                     public void run() {
                         try {
@@ -164,10 +165,13 @@ public class SingleEvent extends AppCompatActivity {
                             yp.parseBusiness();
                             activity = yp.getBusinessName(RandRestaurant);
                             rating = yp.getBusinessRating(RandRestaurant);
+                            img_url = yp.getBusinessImageURL(RandRestaurant);
+                            htmlexample = "<body><h2>"+activity+"<br></h2><p>" + rating + "<p><br> ";
+                            newurl = new URL(img_url);
+                            mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
 
-                            TextView tv = (TextView) findViewById(R.id.textView2);
-                            String htmlexample = "<body><h2>"+activity+"<br></h2><p>" + rating + "<p><br> ";
-                            tv.setText(Html.fromHtml(htmlexample));
+                            t2.start();
+                            t3.start();
                         } catch (Exception e) {
                             System.out.println("\n\n\nError:" + e.getMessage());
                         }//End catch
@@ -177,22 +181,24 @@ public class SingleEvent extends AppCompatActivity {
                 t2 = new Thread() {
                     public void run() {
                         try {
-                            response = yelp.searchByLocation("restaurant", addressString);
-                            yp.setResponse(response);
-                            yp.parseBusiness();
-                            img_url = yp.getBusinessImageURL(RandRestaurant);
-
                             ImageView iv = (ImageView) findViewById(R.id.imageView);
-                            newurl = new URL(img_url);
-                            mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
                             iv.setImageBitmap(mIcon_val);
                         } catch (Exception e) {
                             System.out.println("\n\n\nError:" + e.getMessage());
                         }//End catch
                     }//End run
                 }; //End thread
+                t3 = new Thread() {
+                    public void run() {
+                        try {
+                            TextView tv = (TextView) findViewById(R.id.textView2);
+                            tv.setText(Html.fromHtml(htmlexample));
+                        } catch (Exception e) {
+                            System.out.println("\n\n\nError:" + e.getMessage());
+                        }//End catch
+                    }//End run
+                }; //End thread
                 t1.start();
-                t2.start();
             }
         });
 
