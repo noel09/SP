@@ -41,7 +41,7 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Press"
+            android:text="Generate"
             android:id="@+id/button"
             android:layout_row="6"
             android:layout_column="13"
@@ -52,8 +52,8 @@
         android:layout_y="441dp" />
 
         <TextView
-            android:layout_width="202dp"
-            android:layout_height="158dp"
+            android:layout_width="164dp"
+            android:layout_height="173dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Waiting "
             android:id="@+id/textView2"
