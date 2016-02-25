@@ -56,7 +56,8 @@ public class YelpParser {
             tmpString = "yMobileUrl" + businesses.getJSONObject(i).get("mobile_url").toString() + "yRating" +
                     businesses.getJSONObject(i).get("rating").toString() + "yLocation" +
                     businesses.getJSONObject(i).get("location").toString() + "yImageUrl" +
-                    businesses.getJSONObject(i).get("image_url").toString();
+                    businesses.getJSONObject(i).get("image_url").toString() + "yDistance" +
+                    businesses.getJSONObject(i).get("distance").toString();
             keys.add(businesses.getJSONObject(i).get("name").toString());
             yelp_bundle.put(keys.get(i), tmpString);
         }
@@ -161,8 +162,16 @@ public class YelpParser {
     public String getBusinessImageURL(int i){
         String tmp = yelp_bundle.get(keys.get(i));
         int x = tmp.indexOf("yImageUrl") + 9;
-        String imgUrl = tmp.substring(x, tmp.length());
+        int y = tmp.indexOf("yDistance");
+        String imgUrl = tmp.substring(x, y);
         return imgUrl;
+    }
+
+    public String getBusinessDistance(int i){
+        String tmp = yelp_bundle.get(keys.get(i));
+        int x = tmp.indexOf("yDistance") + 9;
+        String dist = tmp.substring(x, tmp.length());
+        return dist;
     }
 
     /**
