@@ -86,12 +86,12 @@ public class SingleEvent extends AppCompatActivity {
     String response;
     YelpParser yp = new YelpParser();
     URL newurl;
-    String activity, img_url, rating, htmlexample;
+    String activity, img_url, rating, htmlname, htmldetail;
     Bitmap mIcon_val;
 
     int limit = 5;
     double distance;
-    Thread t1, t2, t3;
+    Thread t1, t2, t3, t4;
 
     //private TextView mPlaceDetailsText;
 
@@ -169,12 +169,14 @@ public class SingleEvent extends AppCompatActivity {
                             img_url = yp.getBusinessImageURL(RandRestaurant);
                             System.out.println(yp.getBusinessDistance(RandRestaurant));
                             distance = Math.round(Double.parseDouble(yp.getBusinessDistance(RandRestaurant)) / 162.61) /10.00;
-                            htmlexample = "<body><h2>"+activity+"<br></h2><p>" + rating + "<br>" + distance+ " mi.</p><br> ";
+                            htmlname = "<body><h3>"+activity+"<br></h3>";
+                            htmldetail = "<p>" + rating + "<br>" + distance+ " mi.</p><br> ";
                             newurl = new URL(img_url);
                             mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
 
                             t2.start();
                             t3.start();
+                            t4.start();
                         } catch (Exception e) {
                             System.out.println("\n\n\nError:" + e.getMessage());
                         }//End catch
@@ -195,12 +197,24 @@ public class SingleEvent extends AppCompatActivity {
                     public void run() {
                         try {
                             TextView tv = (TextView) findViewById(R.id.textView2);
-                            tv.setText(Html.fromHtml(htmlexample));
+                            tv.setText(Html.fromHtml(htmlname));
                         } catch (Exception e) {
                             System.out.println("\n\n\nError:" + e.getMessage());
                         }//End catch
                     }//End run
                 }; //End thread
+
+                t4 = new Thread() {
+                    public  void run() {
+                        try {
+                            TextView tv2 = (TextView) findViewById(R.id.textView4);
+                            tv2.setText(Html.fromHtml(htmldetail));
+                        }catch(Exception e ){
+                            System.out.println("\n\n\nError:" + e.getMessage());
+                        }//End catch
+                }//End run
+            }; //End thread
+
                 t1.start();
             }
         });
