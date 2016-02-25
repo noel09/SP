@@ -90,6 +90,7 @@ public class SingleEvent extends AppCompatActivity {
     Bitmap mIcon_val;
 
     int limit = 5;
+    double distance;
     Thread t1, t2, t3;
 
     //private TextView mPlaceDetailsText;
@@ -166,7 +167,9 @@ public class SingleEvent extends AppCompatActivity {
                             activity = yp.getBusinessName(RandRestaurant);
                             rating = yp.getBusinessRating(RandRestaurant);
                             img_url = yp.getBusinessImageURL(RandRestaurant);
-                            htmlexample = "<body><h2>"+activity+"<br></h2><p>" + rating + "<p><br> ";
+                            System.out.println(yp.getBusinessDistance(RandRestaurant));
+                            distance = Math.round(Double.parseDouble(yp.getBusinessDistance(RandRestaurant)) / 162.61) /10.00;
+                            htmlexample = "<body><h2>"+activity+"<br></h2><p>" + rating + "<br>" + distance+ " mi.</p><br> ";
                             newurl = new URL(img_url);
                             mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
 
