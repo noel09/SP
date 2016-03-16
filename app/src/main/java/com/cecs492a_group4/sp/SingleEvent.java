@@ -138,8 +138,8 @@ public class SingleEvent extends AppCompatActivity {
 
             @Override
             public void onError(Status status) {
-            //Log.e(TAG, "onError: Status = " + status.toString());
-            System.out.println("Place selection failed:" + status.getStatusMessage());
+                //Log.e(TAG, "onError: Status = " + status.toString());
+                System.out.println("Place selection failed:" + status.getStatusMessage());
             }
         });
 
@@ -212,17 +212,17 @@ public class SingleEvent extends AppCompatActivity {
                         }catch(Exception e ){
                             System.out.println("\n\n\nError:" + e.getMessage());
                         }//End catch
-                }//End run
-            }; //End thread
+                    }//End run
+                }; //End thread
 
                 t1.start();
             }
         });
 
 
-    // ATTENTION: This was auto-generated to implement the App Indexing API.
-    // See https://g.co/AppIndexing/AndroidStudio for more information
-}
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information
+    }
 
 
 

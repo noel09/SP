@@ -48,8 +48,8 @@
             android:layout_gravity="bottom"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-        android:layout_x="135dp"
-        android:layout_y="446dp" />
+        android:layout_x="113dp"
+        android:layout_y="414dp" />
 
         <TextView
             android:layout_width="323dp"
@@ -81,6 +81,18 @@
             android:id="@+id/textView4"
             android:layout_x="191dp"
             android:layout_y="103dp" />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/FBlogin_button"
+            android:layout_width="266dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/BTregister"
+            android:layout_alignEnd="@+id/BTregister"
+            android:layout_x="19dp"
+            android:layout_y="471dp" />
+
 
     </AbsoluteLayout>
 </ScrollView>
