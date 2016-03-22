@@ -91,7 +91,7 @@ public class SingleEvent extends AppCompatActivity {
 
     int limit = 5;
     double distance;
-    Thread t1, t2, t3, t4;
+    Thread t1;
 
     //private TextView mPlaceDetailsText;
 
@@ -122,7 +122,7 @@ public class SingleEvent extends AppCompatActivity {
                 //test placing address into addressTemp
                 address = place.getAddress();
                 addressString = address.toString();
-
+                //End catch
                 //log to see if the address gets extracted //IT WORKS!!
                 //Log.d("test: ", addressTempString);
 
@@ -134,6 +134,23 @@ public class SingleEvent extends AppCompatActivity {
             mPlaceAttribution.setText("");
         }
         */
+                try {
+                    response = yelp.searchByLocation("restaurant", addressString);
+                    yp.setResponse(response);
+                    yp.parseBusiness();
+                    activity = yp.getBusinessName(RandRestaurant);
+                    rating = yp.getBusinessRating(RandRestaurant);
+                    img_url = yp.getBusinessImageURL(RandRestaurant);
+                    System.out.println(yp.getBusinessDistance(RandRestaurant));
+                    distance = Math.round(Double.parseDouble(yp.getBusinessDistance(RandRestaurant)) / 162.61) / 10.00;
+                    htmlname = "<body><h3>" + activity + "<br></h3>";
+                    htmldetail = "<p>" + rating + "<br>" + distance + " mi.</p><br> ";
+                    newurl = new URL(img_url);
+                    mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
+
+                } catch (Exception e) {
+                    System.out.println("\n\n\nError:" + e.getMessage());
+                }//End catch
             }
 
             @Override
@@ -168,55 +185,41 @@ public class SingleEvent extends AppCompatActivity {
                             rating = yp.getBusinessRating(RandRestaurant);
                             img_url = yp.getBusinessImageURL(RandRestaurant);
                             System.out.println(yp.getBusinessDistance(RandRestaurant));
-                            distance = Math.round(Double.parseDouble(yp.getBusinessDistance(RandRestaurant)) / 162.61) /10.00;
-                            htmlname = "<body><h3>"+activity+"<br></h3>";
-                            htmldetail = "<p>" + rating + "<br>" + distance+ " mi.</p><br> ";
+                            distance = Math.round(Double.parseDouble(yp.getBusinessDistance(RandRestaurant)) / 162.61) / 10.00;
+                            htmlname = "<body><h3>" + activity + "<br></h3>";
+                            htmldetail = "<p>" + rating + "<br>" + distance + " mi.</p><br> ";
                             newurl = new URL(img_url);
                             mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
 
-                            t2.start();
-                            t3.start();
-                            t4.start();
                         } catch (Exception e) {
                             System.out.println("\n\n\nError:" + e.getMessage());
                         }//End catch
                     }//End run
                 }; //End thread
-
-                t2 = new Thread() {
-                    public void run() {
-                        try {
-                            ImageView iv = (ImageView) findViewById(R.id.imageView);
-                            iv.setImageBitmap(mIcon_val);
-                        } catch (Exception e) {
-                            System.out.println("\n\n\nError:" + e.getMessage());
-                        }//End catch
-                    }//End run
-                }; //End thread
-                t3 = new Thread() {
-                    public void run() {
-                        try {
-                            TextView tv = (TextView) findViewById(R.id.textView2);
-                            tv.setText(Html.fromHtml(htmlname));
-                        } catch (Exception e) {
-                            System.out.println("\n\n\nError:" + e.getMessage());
-                        }//End catch
-                    }//End run
-                }; //End thread
-
-                t4 = new Thread() {
-                    public  void run() {
-                        try {
-                            TextView tv2 = (TextView) findViewById(R.id.textView4);
-                            tv2.setText(Html.fromHtml(htmldetail));
-                        }catch(Exception e ){
-                            System.out.println("\n\n\nError:" + e.getMessage());
-                        }//End catch
-                    }//End run
-                }; //End thread
-
                 t1.start();
-            }
+
+                try {
+                    ImageView iv = (ImageView) findViewById(R.id.imageView);
+                    iv.setImageBitmap(mIcon_val);
+                } catch (Exception e) {
+                    System.out.println("\n\n\nError:" + e.getMessage());
+                }//End catch
+
+                try {
+                    TextView tv = (TextView) findViewById(R.id.textView2);
+                    tv.setText(Html.fromHtml(htmlname));
+                } catch (Exception e) {
+                    System.out.println("\n\n\nError:" + e.getMessage());
+                }//End catch
+
+                try {
+                    TextView tv2 = (TextView) findViewById(R.id.textView4);
+                    tv2.setText(Html.fromHtml(htmldetail));
+                } catch (Exception e) {
+                    System.out.println("\n\n\nError:" + e.getMessage());
+                }//End catch
+            }//End run
+
         });
 
 
