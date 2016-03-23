@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.text.Html;
@@ -62,14 +63,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Switch;
+
+
+import android.view.View.OnClickListener;
 
 
 
 
-
-
-
-public class SingleEvent extends AppCompatActivity {
+public class SingleEvent extends AppCompatActivity implements PlaceSelectionListener, OnClickListener, CompoundButton.OnCheckedChangeListener{
 
 
     /**
@@ -92,6 +94,10 @@ public class SingleEvent extends AppCompatActivity {
     int limit = 5;
     double distance;
     Thread t1;
+    ImageView iv;
+    TextView tv, tv2;
+    Switch locationSwitch;
+    String finalAddress;
 
     //private TextView mPlaceDetailsText;
 
@@ -111,31 +117,21 @@ public class SingleEvent extends AppCompatActivity {
 
         // Register a listener to receive callbacks when a place has been selected or an error has
         // occurred.
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                // Log.i(TAG, "Place Selected: " + place.getName());
+        finalAddress = MainActivity.staticAddress;
 
-                // Format the returned place's details and display them in the TextView.
-                //mPlaceDetailsText.setText(place.getAddress());
+        locationSwitch = (Switch) findViewById(R.id.locationSwitch);
 
-                //test placing address into addressTemp
-                address = place.getAddress();
-                addressString = address.toString();
-                //End catch
-                //log to see if the address gets extracted //IT WORKS!!
-                //Log.d("test: ", addressTempString);
-
-        /*
-        CharSequence attributions = place.getAttributions();
-        if (!TextUtils.isEmpty(attributions)) {
-            mPlaceAttribution.setText(Html.fromHtml(attributions.toString()));
-        } else {
-            mPlaceAttribution.setText("");
+        if (locationSwitch != null){
+            locationSwitch.setOnCheckedChangeListener(this);
         }
-        */
+        yelp.setLimit(limit);
+        autocompleteFragment.setOnPlaceSelectedListener(this);
+
+
+        t1 = new Thread() {
+            public void run() {
                 try {
-                    response = yelp.searchByLocation("restaurant", addressString);
+                    response = yelp.searchByLocation("restaurant", finalAddress);
                     yp.setResponse(response);
                     yp.parseBusiness();
                     activity = yp.getBusinessName(RandRestaurant);
@@ -151,81 +147,124 @@ public class SingleEvent extends AppCompatActivity {
                 } catch (Exception e) {
                     System.out.println("\n\n\nError:" + e.getMessage());
                 }//End catch
-            }
+            }//End run
+        }; //End thread
+        t1.start();
 
-            @Override
-            public void onError(Status status) {
-                //Log.e(TAG, "onError: Status = " + status.toString());
-                System.out.println("Place selection failed:" + status.getStatusMessage());
-            }
-        });
-
-
-
-        // Retrieve the TextViews that will display details about the selected place.
-        //mPlaceDetailsText = (TextView) findViewById(R.id.place_details);
-        // mPlaceAttribution = (TextView) findViewById(R.id.place_attribution);
 
 
         Button generator = (Button) findViewById(R.id.button);
 
         //String htmlexample = "<body><h2>The Result<br></h2>";
         //tv.setText(Html.fromHtml(htmlexample, null, null));
-        generator.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                RandRestaurant = ran.nextInt(limit);
-                yelp.setLimit(limit);
-                t1 = new Thread() {
-                    public void run() {
-                        try {
-                            response = yelp.searchByLocation("restaurant", addressString);
-                            yp.setResponse(response);
-                            yp.parseBusiness();
-                            activity = yp.getBusinessName(RandRestaurant);
-                            rating = yp.getBusinessRating(RandRestaurant);
-                            img_url = yp.getBusinessImageURL(RandRestaurant);
-                            System.out.println(yp.getBusinessDistance(RandRestaurant));
-                            distance = Math.round(Double.parseDouble(yp.getBusinessDistance(RandRestaurant)) / 162.61) / 10.00;
-                            htmlname = "<body><h3>" + activity + "<br></h3>";
-                            htmldetail = "<p>" + rating + "<br>" + distance + " mi.</p><br> ";
-                            newurl = new URL(img_url);
-                            mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
+        generator.setOnClickListener(this);
 
-                        } catch (Exception e) {
-                            System.out.println("\n\n\nError:" + e.getMessage());
-                        }//End catch
-                    }//End run
-                }; //End thread
-                t1.start();
 
-                try {
-                    ImageView iv = (ImageView) findViewById(R.id.imageView);
-                    iv.setImageBitmap(mIcon_val);
-                } catch (Exception e) {
-                    System.out.println("\n\n\nError:" + e.getMessage());
-                }//End catch
-
-                try {
-                    TextView tv = (TextView) findViewById(R.id.textView2);
-                    tv.setText(Html.fromHtml(htmlname));
-                } catch (Exception e) {
-                    System.out.println("\n\n\nError:" + e.getMessage());
-                }//End catch
-
-                try {
-                    TextView tv2 = (TextView) findViewById(R.id.textView4);
-                    tv2.setText(Html.fromHtml(htmldetail));
-                } catch (Exception e) {
-                    System.out.println("\n\n\nError:" + e.getMessage());
-                }//End catch
-            }//End run
-
-        });
 
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information
     }
+
+
+    public void onPlaceSelected(Place place) {
+        // Log.i(TAG, "Place Selected: " + place.getName());
+
+        // Format the returned place's details and display them in the TextView.
+        //mPlaceDetailsText.setText(place.getAddress());
+
+        //test placing address into addressTemp
+        address = place.getAddress();
+        addressString = address.toString();
+        finalAddress = addressString;
+        if (locationSwitch.isChecked()) {
+            locationSwitch.toggle();
+        }
+
+        //End catch
+        //log to see if the address gets extracted //IT WORKS!!
+        //Log.d("test: ", addressTempString);
+
+        /*
+        CharSequence attributions = place.getAttributions();
+        if (!TextUtils.isEmpty(attributions)) {
+            mPlaceAttribution.setText(Html.fromHtml(attributions.toString()));
+        } else {
+            mPlaceAttribution.setText("");
+        }
+        */
+    }
+
+    public void onError(Status status) {
+        //Log.e(TAG, "onError: Status = " + status.toString());
+        System.out.println("Place selection failed:" + status.getStatusMessage());
+
+    }
+
+
+
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        Toast.makeText(this,(isChecked ? "Using GSM location" : "Please enter a location"),
+                Toast.LENGTH_SHORT).show();
+        if(isChecked) {
+            finalAddress = MainActivity.staticAddress;
+        } else {
+            finalAddress = addressString;
+        }
+    }
+
+
+
+
+    public void onClick(View v) {
+
+        RandRestaurant = ran.nextInt(limit);
+
+        t1 = new Thread() {
+            public void run() {
+                try {
+                    response = yelp.searchByLocation("restaurant", finalAddress);
+                    yp.setResponse(response);
+                    yp.parseBusiness();
+                    activity = yp.getBusinessName(RandRestaurant);
+                    rating = yp.getBusinessRating(RandRestaurant);
+                    img_url = yp.getBusinessImageURL(RandRestaurant);
+                    System.out.println(yp.getBusinessDistance(RandRestaurant));
+                    distance = Math.round(Double.parseDouble(yp.getBusinessDistance(RandRestaurant)) / 162.61) / 10.00;
+                    htmlname = "<body><h3>" + activity + "<br></h3>";
+                    htmldetail = "<p>" + rating + "<br>" + distance + " mi.</p><br> ";
+                    newurl = new URL(img_url);
+                    mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
+
+                } catch (Exception e) {
+                    System.out.println("\n\n\nError:" + e.getMessage());
+                }//End catch
+            }//End run
+        }; //End thread
+        t1.start();
+
+        try {
+            iv = (ImageView) findViewById(R.id.imageView);
+            iv.setImageBitmap(mIcon_val);
+        } catch (Exception e) {
+            System.out.println("\n\n\nError:" + e.getMessage());
+        }//End catch
+
+        try {
+            tv = (TextView) findViewById(R.id.textView2);
+            tv.setText(Html.fromHtml(htmlname));
+        } catch (Exception e) {
+            System.out.println("\n\n\nError:" + e.getMessage());
+        }//End catch
+
+        try {
+            tv2 = (TextView) findViewById(R.id.textView4);
+            tv2.setText(Html.fromHtml(htmldetail));
+        } catch (Exception e) {
+            System.out.println("\n\n\nError:" + e.getMessage());
+        }//End catch
+    }//End run
+
 
 
 

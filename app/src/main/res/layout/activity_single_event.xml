@@ -82,6 +82,15 @@
             android:layout_x="191dp"
             android:layout_y="103dp" />
 
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Location:"
+            android:id="@+id/locationSwitch"
+            android:layout_x="10dp"
+            android:layout_y="50dp"
+            android:checked="true" />
+
 
     </AbsoluteLayout>
 </ScrollView>

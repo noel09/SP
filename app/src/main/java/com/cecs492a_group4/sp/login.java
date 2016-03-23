@@ -36,6 +36,7 @@ public class login extends AppCompatActivity {
     private CallbackManager callbackManager;
     private LoginButton FbLoginButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

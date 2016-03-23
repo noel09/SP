@@ -24,7 +24,8 @@
         android:id="@+id/TFemailLogin"
         android:layout_below="@+id/textView"
         android:layout_alignParentStart="true"
-        android:hint="Enter Your Email Address" />
+        android:hint="Enter Your Email Address"
+        android:singleLine="true" />
 
     <TextView
         android:layout_width="wrap_content"
