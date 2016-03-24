@@ -186,7 +186,7 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
     URL icon_url, url_rating;
     ArrayAdapter<DayEvent> arrayAdapter;
     int limit = 5;
-    double distance;
+    //double distance;
     Thread t1, t2;
     ImageView iv;
     TextView tv, tv2;
@@ -381,6 +381,9 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
                     ImageView rating_img = (ImageView) itemview.findViewById(R.id.ratingImg);
                     rating_img.setImageBitmap(an_event.ratingimg);
 
+                    TextView distance = (TextView) itemview.findViewById(R.id.distanceId);
+                    distance.setText(an_event.distance + " mi");
+
 
                 }catch (Exception a)
                 {
@@ -419,12 +422,12 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
                  response = yelp.searchByLocation(searchToken, Address);
                  System.out.println(searchToken + " gave me this response: " + response);
                  yp.setResponse(response);
-                 //yp.parseBusiness();
+                 yp.parseBusiness();
 
                  int nameSIndex = response.indexOf("\"name\"",1) + 8;
-
                  int imgSIndex = response.indexOf("\"image_url\"",1) + 13;
                  int ratingSIndex = response.indexOf("\"rating_img_url\"",1) + 18;
+                 //int distanceSIndex = response.indexOf("\"distance\"",1) + 11;
 
 
 
@@ -432,10 +435,20 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
                      nameSIndex = response.indexOf("\"name\"",++nameSIndex) + 8;
                      imgSIndex = response.indexOf("\"image_url\"",++imgSIndex) + 13;
                      ratingSIndex = response.indexOf("\"rating_img_url\"",++ratingSIndex) + 18;
+                 //    distanceSIndex = response.indexOf("\"distance\"",++distanceSIndex) + 11;
                  }
                  int ratingEIndex = response.indexOf("review_count",++ratingSIndex) - 4;
                  int nameEIndex = response.indexOf("snippet_image_url",++nameSIndex) - 4;
                  int imgEIndex = response.indexOf("location",++imgSIndex) - 4;
+                 //int distanceEIndex = response.indexOf("}, {\"is_claimed",++distanceSIndex) - 1;
+
+                 String distance = yp.getBusinessDistance(randPick);
+//               distance = distance.substring(distanceSIndex,distanceEIndex);
+                 System.out.println("Distance: " + distance);
+
+                 double dis = Double.parseDouble(distance);
+                 dis = Math.round(dis/162.61)/ 10.00;
+                 System.out.println("Distance parse: " + dis);
                  String tmp = response;
                  tmp = tmp.substring(nameSIndex,nameEIndex);
                  System.out.println(tmp);
@@ -459,9 +472,9 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
                  rating_url = ratingURL;
                  icon_url = new URL(img_url);
                  url_rating = new URL(rating_url);
-                 dayevent.add(new DayEvent(activity, icon_url, url_rating, searchToken));
-             //} catch (JSONException e) {
-                // e.printStackTrace();
+                 dayevent.add(new DayEvent(activity, icon_url, url_rating, searchToken,dis));
+             } catch (JSONException e) {
+                 e.printStackTrace();
              } catch (MalformedURLException e) {
                  e.printStackTrace();
              } catch (IOException e) {

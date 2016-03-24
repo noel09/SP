@@ -11,12 +11,13 @@ import java.net.URL;
  */
 public class DayEvent {
     String criteria;
+    double distance;
     String activitytitle;
     URL Imageurl, rating_url ;
     Bitmap Iconimg, ratingimg;
     String rating;
 
-    public DayEvent(String activity_title, URL activity_iconURL, URL activity_rating, String activity_criteria) throws IOException {
+    public DayEvent(String activity_title, URL activity_iconURL, URL activity_rating, String activity_criteria, double distance) throws IOException {
         super();
         this.activitytitle = activity_title;
         this.Imageurl = activity_iconURL;
@@ -24,6 +25,7 @@ public class DayEvent {
         this.rating_url = activity_rating;
         ratingimg = BitmapFactory.decodeStream(rating_url.openConnection().getInputStream());
         this.criteria = activity_criteria;
+        this.distance = distance;
     }
 
     public String getActivitytitle() {

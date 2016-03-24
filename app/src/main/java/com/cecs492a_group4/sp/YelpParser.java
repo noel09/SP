@@ -20,6 +20,7 @@ import com.beust.jcommander.Parameter;
 
 //
 
+
 public class YelpParser {
 
     private String yelp_response;
@@ -90,30 +91,30 @@ public class YelpParser {
             tmpString = businessTemp.get("rating_img_url").toString();
             rating_url.add(tmpString);
 
-            //Store the business' image url to the array list
-            tmpString = businessTemp.get("image_url").toString();
-            image_url.add(tmpString);
-
             //Store the distance to the business to the array list
-           // try {
-            //    tmpString = businessTemp.get("distance").toString();
-             //   distance.add(tmpString);
-           // }catch (Exception excpt){
-            //    distance.add("-1");
-            //}
+            try {
+                tmpString = businessTemp.get("distance").toString();
+                distance.add(tmpString);
+            }catch (Exception excpt){
+                distance.add("-1");
+            }
 
-
-
-            //Get the address, zipcode, city, state
             bLocation = businessTemp.getJSONObject("location");
             tmpString = bLocation.get("address").toString();
-            address = tmpString.substring(2, tmpString.length() - 2);
+            if(tmpString.length() > 2)
+                address = tmpString.substring(2, tmpString.length() - 2);
+            else
+                address = "";
             zipcode = bLocation.get("postal_code").toString();
             city = bLocation.get("city").toString();
             state = bLocation.get("state_code").toString();
 
+
             //Store the business location to the array list
-            bAddress.add(address + ", " + city + ", " + state + " " + zipcode);
+            if (address.length() > 0)
+                bAddress.add(address + ", " + city + ", " + state + " " + zipcode);
+            else
+                bAddress.add(city + ", " + state + " " + zipcode);
         }
     }
 
@@ -159,7 +160,6 @@ public class YelpParser {
     public String getBusinessAddress(int i){
         return bAddress.get(i);
     }
-
 
     public String getBusinessImageURL(int i){
         return image_url.get(i);
