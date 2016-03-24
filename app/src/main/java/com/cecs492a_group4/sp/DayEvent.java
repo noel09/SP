@@ -22,7 +22,7 @@ public class DayEvent {
         this.Imageurl = activity_iconURL;
         Iconimg = BitmapFactory.decodeStream(Imageurl.openConnection().getInputStream());
         this.rating_url = activity_rating;
-//        ratingimg = BitmapFactory.decodeStream(rating_url.openConnection().getInputStream());
+        ratingimg = BitmapFactory.decodeStream(rating_url.openConnection().getInputStream());
         this.criteria = activity_criteria;
     }
 

@@ -23,11 +23,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.location.LocationServices;
 
 import android.location.Location;
 import android.widget.Toast;
@@ -45,14 +40,8 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.FacebookSdk;
 
 
-public class MainActivity extends AppCompatActivity implements
-        ConnectionCallbacks, OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity {
 
-    public GoogleApiClient mGoogleApiClient;
-    public Location mLastLocation;
-    public static Location staticLocation;
-    public static String staticAddress;
-    public static String test;
 
 
     private AccessTokenTracker accessTokenTracker;
@@ -60,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        buildGoogleApiClient();
         FacebookSdk.sdkInitialize(getApplicationContext());
 
 
@@ -77,102 +65,6 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
-
-    @Override
-    public void onConnected(Bundle connectionHint)  {
-        // Provides a simple way of getting a device's location and is well suited for
-        // applications that do not require a fine-grained location and that do not need location
-        // updates. Gets the best and most recent location currently available, which may be null
-        // in rare cases when a location is not available.
-
-        int permissionCheck = ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION);
-
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-        if (mLastLocation != null) {
-
-            mLastLocation.getLatitude();
-
-            mLastLocation.getLongitude();
-
-            staticLocation = mLastLocation;
-
-
-
-            try {
-                staticAddress = reverseGeocode(staticLocation.getLatitude(), staticLocation.getLongitude());
-            }catch(IOException i){}
-
-            Toast.makeText(this, " Lat: " + staticLocation.getLatitude() + " Long: " + staticLocation.getLongitude()
-                            + " Address: " + staticAddress,
-                    Toast.LENGTH_LONG).show();
-
-        } else {
-            Toast.makeText(this, "Failed to connect-lastknownlocation", Toast.LENGTH_LONG).show();
-        }
-    }
-
-
-    @Override
-    public void onConnectionFailed(ConnectionResult result) {
-        // Refer to the javadoc for ConnectionResult to see what error codes might be returned in
-        // onConnectionFailed.
-        //Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
-    }
-
-
-    @Override
-    public void onConnectionSuspended(int cause) {
-        // The connection to Google Play services was lost for some reason. We call connect() to
-        // attempt to re-establish the connection.
-        //Log.i(TAG, "Connection suspended");
-        mGoogleApiClient.connect();
-    }
-
-
-
-    public String reverseGeocode(double latitude, double longitude) throws IOException {
-        Geocoder gc = new Geocoder(this);
-
-        if(gc.isPresent()) {
-            List<Address> list = gc.getFromLocation(latitude, longitude, 1);
-
-            Address address = list.get(0);
-
-
-            StringBuffer str = new StringBuffer();
-            str.append(address.getAddressLine(0) + ", ");
-            str.append(address.getLocality() + ", ");
-            str.append(address.getAdminArea() + ", ");
-            str.append(address.getCountryName());
-
-            String strAddress = str.toString();
-            return strAddress;
-        }
-
-        return null;
-    }
 
     private void updateWithToken(AccessToken currentAccessToken) {
         if (currentAccessToken != null) {

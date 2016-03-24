@@ -122,5 +122,14 @@
         android:layout_x="-3dp"
         android:layout_y="487dp" />
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar2"
+        android:layout_x="122dp"
+        android:layout_y="222dp"
+        android:indeterminate="false" />
+
 
 </AbsoluteLayout>
