@@ -193,6 +193,7 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
     Switch locationSwitch;
     public static String finalAddress;
     ListView listView;
+    Button fullButton, singleButton;
 
 
 
@@ -252,16 +253,16 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
         yelp.setLimit(limit);
         autocompleteFragment.setOnPlaceSelectedListener(this);
 
-        Button generator = (Button) findViewById(R.id.fulldaybtn);
-        Button singlebutton = (Button) findViewById(R.id.singleDayBtn);
+        fullButton = (Button) findViewById(R.id.fulldaybtn);
+        singleButton = (Button) findViewById(R.id.singleDayBtn);
 
 
         //String htmlexample = "<body><h2>The Result<br></h2>";
         //tv.setText(Html.fromHtml(htmlexample, null, null));
         arrayAdapter = new MyDayListAdapter();
         listView.setAdapter(arrayAdapter);
-        generator.setOnClickListener(this);
-        singlebutton.setOnClickListener(this);
+        fullButton.setOnClickListener(this);
+        singleButton.setOnClickListener(this);
 
 
 
@@ -500,6 +501,8 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
             autocompleteFragment.setHint("Enter Address");
         }
         else {
+            fullButton.setEnabled(false);
+            singleButton.setEnabled(false);
             //setNull();
             RandRestaurant = ran.nextInt(limit);
             switch (v.getId()) {
@@ -540,7 +543,8 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
                     break;
             }
         }
-
+        fullButton.setEnabled(true);
+        singleButton.setEnabled(true);
     }
 
     protected synchronized void buildGoogleApiClient() {
