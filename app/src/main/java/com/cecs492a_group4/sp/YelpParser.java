@@ -90,17 +90,19 @@ public class YelpParser {
             tmpString = businessTemp.get("rating_img_url").toString();
             rating_url.add(tmpString);
 
-            //Store the distance to the business to the array list
-            try {
-                tmpString = businessTemp.get("distance").toString();
-                distance.add(tmpString);
-            }catch (Exception excpt){
-                distance.add("-1");
-            }
-
             //Store the business' image url to the array list
             tmpString = businessTemp.get("image_url").toString();
             image_url.add(tmpString);
+
+            //Store the distance to the business to the array list
+           // try {
+            //    tmpString = businessTemp.get("distance").toString();
+             //   distance.add(tmpString);
+           // }catch (Exception excpt){
+            //    distance.add("-1");
+            //}
+
+
 
             //Get the address, zipcode, city, state
             bLocation = businessTemp.getJSONObject("location");
@@ -157,6 +159,7 @@ public class YelpParser {
     public String getBusinessAddress(int i){
         return bAddress.get(i);
     }
+
 
     public String getBusinessImageURL(int i){
         return image_url.get(i);

@@ -14,11 +14,6 @@
         limitations under the License.
         -->
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="false">
-
     <AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -39,21 +34,21 @@
 
 
     <Button
-            android:layout_width="wrap_content"
+            android:layout_width="86dp"
             android:layout_height="wrap_content"
-            android:text="Generate"
-            android:id="@+id/button"
+            android:text="fullDay"
+            android:id="@+id/fulldaybtn"
             android:layout_row="6"
             android:layout_column="13"
             android:layout_gravity="bottom"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-        android:layout_x="113dp"
-        android:layout_y="414dp" />
+        android:layout_x="269dp"
+        android:layout_y="492dp" />
 
         <TextView
-            android:layout_width="323dp"
-            android:layout_height="151dp"
+            android:layout_width="152dp"
+            android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/textView2"
             android:layout_row="5"
@@ -68,19 +63,19 @@
 
 
         <ImageView
-            android:layout_width="138dp"
-            android:layout_height="163dp"
+            android:layout_width="74dp"
+            android:layout_height="87dp"
             android:id="@+id/imageView"
-            android:layout_x="42dp"
-            android:layout_y="107dp" />
+            android:layout_x="24dp"
+            android:layout_y="411dp" />
 
         <TextView
-            android:layout_width="159dp"
-            android:layout_height="186dp"
+            android:layout_width="75dp"
+            android:layout_height="81dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/textView4"
-            android:layout_x="191dp"
-            android:layout_y="103dp" />
+            android:layout_x="166dp"
+            android:layout_y="413dp" />
 
         <Switch
             android:layout_width="wrap_content"
@@ -91,6 +86,41 @@
             android:layout_y="50dp"
             android:checked="true" />
 
+        <ListView
+            android:layout_width="364dp"
+            android:layout_height="394dp"
+            android:id="@+id/listView"
+            android:layout_x="0dp"
+            android:layout_y="100dp"
+            android:clickable="true"
+            android:contextClickable="true"
+            android:longClickable="true"
+            android:smoothScrollbar="true" />
 
-    </AbsoluteLayout>
-</ScrollView>
+    <ProgressBar
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_x="123dp"
+        android:layout_y="251dp"
+        android:max="100"
+        android:progress="1"
+        android:indeterminate="true"
+        android:visibility="invisible" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SingleDay"
+        android:id="@+id/singleDayBtn"
+        android:layout_row="6"
+        android:layout_column="13"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_x="-3dp"
+        android:layout_y="487dp" />
+
+
+</AbsoluteLayout>
