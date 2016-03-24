@@ -296,6 +296,7 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
             @Override
             public void run() {
              try {
+
                  System.out.println("Index: " + randPick);
                  response = yelp.searchByLocation(searchToken, Address);
                  System.out.println(searchToken + " gave me this response: " + response);
