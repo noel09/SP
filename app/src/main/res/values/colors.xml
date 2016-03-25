@@ -3,4 +3,15 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="Riptide">#86e2d5</color>
+    <color name="Cape_Honey">#fde3a7</color>
+    <color name="Monza">#cf000f</color>
+    <color name="Ebony_Clay">#22313f</color>
+    <color name="Madison">#2c3e50</color>
+    <color name="White_Smoke">#ececec</color>
+    <color name="Gossip">#87d37c</color>
+    <color name="Humming_Bird">#c5eff7</color>
+    <color name="White">#ffffff</color>
+    <color name="Hoki">#67809f</color>
+    <color name="Custom">#65d1f3</color>
 </resources>
