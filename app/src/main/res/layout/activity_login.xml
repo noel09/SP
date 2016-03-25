@@ -7,26 +7,30 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.cecs492a_group4.sp.login">
+    android:background="@color/Madison"
+    tools:context="com.cecs492a_group4.sp.login"
+    android:theme="@android:style/Theme.Holo">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Email Address"
+        android:id="@+id/textView"
+        android:layout_marginTop="202dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/textView" />
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/TFemailLogin"
-        android:layout_below="@+id/textView"
         android:layout_alignParentStart="true"
         android:hint="Enter Your Email Address"
         android:singleLine="true"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentRight="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -34,43 +38,60 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Password"
         android:id="@+id/textView2"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/TFemailLogin"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentRight="true" />
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/TFloginPassword"
-        android:layout_below="@+id/textView2"
         android:layout_alignParentStart="true"
         android:hint="Enter Your Password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentRight="true" />
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Login"
         android:id="@+id/BLogin"
-        android:layout_below="@+id/TFloginPassword"
         android:layout_alignParentStart="true"
-        android:onClick="onButtonClick" />
+        android:background="@color/White_Smoke"
+        android:textColor="@color/Ebony_Clay"
+        android:onClick="onButtonClick"
+        android:layout_below="@+id/TFloginPassword"
+        android:layout_alignParentRight="true" />
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Register"
         android:id="@+id/BTregister"
+        android:onClick="onButtonClick"
+        android:background="@color/White_Smoke"
+        android:textColor="@color/Ebony_Clay"
+        android:layout_marginTop="15dp"
         android:layout_below="@+id/BLogin"
-        android:layout_alignParentStart="true"
-        android:onClick="onButtonClick" />
+        android:layout_alignParentStart="true" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/FBlogin_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/BTregister"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
         android:layout_alignEnd="@+id/BTregister" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/iViewLogo"
+        android:src="@drawable/logo"
+        android:layout_above="@+id/TFemailLogin"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="46dp" />
 </RelativeLayout>

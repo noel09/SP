@@ -237,16 +237,14 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
             Toast.makeText(this,"Using GSM location",
                     Toast.LENGTH_SHORT).show();
 
-            Toast.makeText(this, "test: " + finalAddress,
-                    Toast.LENGTH_SHORT).show();
+
         }
         else{
             locationSwitch.toggle();
             Toast.makeText(this,("Please enter a location"),
                     Toast.LENGTH_SHORT).show();
 
-            Toast.makeText(this, "test: " + finalAddress,
-                    Toast.LENGTH_SHORT).show();
+
         }
 
         locationSwitch.setOnCheckedChangeListener(this);
@@ -289,8 +287,7 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
             locationSwitch.toggle();
         }
 
-        Toast.makeText(this, "test: " + finalAddress,
-                Toast.LENGTH_SHORT).show();
+
         //End catch
         //log to see if the address gets extracted //IT WORKS!!
         //Log.d("test: ", addressTempString);
@@ -316,8 +313,7 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
             autocompleteFragment.setText("");
             autocompleteFragment.setHint(staticAddress);
 
-            Toast.makeText(this, "test: " + finalAddress,
-                    Toast.LENGTH_SHORT).show();
+
         }
         else if(isChecked && staticAddress == null)    {
             Toast.makeText(this, ("Please enter a location"),
@@ -326,8 +322,7 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
             autocompleteFragment.setText("");
             finalAddress = null;
 
-            Toast.makeText(this, "test: " + finalAddress,
-                    Toast.LENGTH_SHORT).show();
+
 
         }
         else {
@@ -339,8 +334,7 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
             autocompleteFragment.setText("");
             autocompleteFragment.setHint("");
 
-            Toast.makeText(this, "test: " + finalAddress,
-                    Toast.LENGTH_SHORT).show();
+
 
         }
     }
@@ -592,12 +586,12 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
                 staticAddress = reverseGeocode(staticLocation.getLatitude(), staticLocation.getLongitude());
             }catch(IOException i){}
 
-            Toast.makeText(this, " Lat: " + staticLocation.getLatitude() + " Long: " + staticLocation.getLongitude()
-                            + " Address: " + staticAddress,
-                    Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, " Lat: " + staticLocation.getLatitude() + " Long: " + staticLocation.getLongitude()
+              //              + " Address: " + staticAddress,
+               //     Toast.LENGTH_LONG).show();
 
         } else {
-            Toast.makeText(this, "Failed to connect-lastknownlocation", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed to connect-lastknownlocation: Plese enter an address instead", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -659,6 +653,15 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
         return null;
     }
 
+    //Test example Abdullah
+    public int testingmethod(int first, int second)
+    {
+        return first+second;
+    }
+
+    public void getYelpResponse(){
+
+    }
 
 }
 

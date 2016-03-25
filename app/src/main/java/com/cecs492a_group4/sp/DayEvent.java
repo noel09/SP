@@ -21,9 +21,21 @@ public class DayEvent {
         super();
         this.activitytitle = activity_title;
         this.Imageurl = activity_iconURL;
-        Iconimg = BitmapFactory.decodeStream(Imageurl.openConnection().getInputStream());
+        try{
+            Iconimg = BitmapFactory.decodeStream(Imageurl.openConnection().getInputStream());
+        }catch (Exception e)
+        {
+            Iconimg = null;
+        }
+
         this.rating_url = activity_rating;
-        ratingimg = BitmapFactory.decodeStream(rating_url.openConnection().getInputStream());
+        try{
+            ratingimg = BitmapFactory.decodeStream(rating_url.openConnection().getInputStream());
+        }catch (Exception e)
+        {
+            Iconimg = null;
+        }
+
         this.criteria = activity_criteria;
         this.distance = distance;
     }
