@@ -17,6 +17,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDlOwy8Maq32ZR_jcFDGef8vuQJwogdtBU" />
@@ -43,7 +44,16 @@
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:label="@string/app_name" />
+        <activity
+            android:name = ".Pop"
+            android:theme="@style/AppTheme.CustomTheme">
+        </activity>
     </application>
+
+    <provider android:authorities="com.facebook.app.FacebookContentProvider232975713720353"
+        android:name="com.facebook.FacebookContentProvider"
+        android:exported="true" />
+
 
 
 

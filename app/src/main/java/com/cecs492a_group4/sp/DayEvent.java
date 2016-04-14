@@ -2,6 +2,7 @@ package com.cecs492a_group4.sp;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 
 import java.io.IOException;
 import java.net.URL;
@@ -15,14 +16,19 @@ public class DayEvent {
     String activitytitle;
     URL Imageurl, rating_url ;
     Bitmap Iconimg, ratingimg;
-    String rating;
+    String rating, url;
 
-    public DayEvent(String activity_title, URL activity_iconURL, URL activity_rating, String activity_criteria, double distance) throws IOException {
+
+    public DayEvent(String activity_title, URL activity_iconURL, URL activity_rating, String activity_criteria, double distance, String webURL) throws IOException {
         super();
         this.activitytitle = activity_title;
         this.Imageurl = activity_iconURL;
+        this.url = webURL;
         try{
+
             Iconimg = BitmapFactory.decodeStream(Imageurl.openConnection().getInputStream());
+
+
         }catch (Exception e)
         {
             Iconimg = null;
@@ -48,5 +54,11 @@ public class DayEvent {
         return Imageurl;
     }
 
+    public Bitmap getIconimg() { return Iconimg; }
+
     public String getCriteria() { return criteria; }
+
+
+
 }
+

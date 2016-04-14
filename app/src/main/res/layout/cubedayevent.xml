@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    android:background="@color/Madison">
 
     <ImageView
         android:layout_width="100dp"
@@ -16,7 +18,8 @@
         android:id="@+id/ratingImg"
         android:layout_alignBottom="@+id/acivity_icon"
         android:layout_toEndOf="@+id/acivity_icon"
-        android:paddingStart="5dp" />
+        android:paddingStart="5dp"
+        android:layout_marginTop="7dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,13 +28,16 @@
         android:text="Restaurant"
         android:id="@+id/criteria"
         android:paddingEnd="10dp"
-        android:layout_alignTop="@+id/ratingImg"
-        android:layout_alignEnd="@+id/distanceId" />
+        android:textColor="@color/White"
+        android:layout_below="@+id/distanceId"
+        android:layout_toEndOf="@+id/acivity_icon"
+        android:layout_marginLeft="15dp" />
 
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:ellipsize="marquee"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:scrollHorizontally="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
@@ -40,7 +46,8 @@
         android:id="@+id/activity_title"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/acivity_icon"
-        android:paddingStart="5dp" />
+        android:paddingStart="5dp"
+        android:textColor="@color/White" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,8 +56,43 @@
         android:text="1.0 mi"
         android:id="@+id/distanceId"
         android:paddingEnd="10dp"
-        android:layout_marginEnd="31dp"
-        android:layout_above="@+id/criteria"
+        android:textColor="@color/White"
+        android:layout_alignTop="@+id/FBshare"
+        android:layout_alignStart="@+id/criteria" />
+
+
+    <ImageButton
+        android:id="@+id/deleteItem"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="right|center_vertical"
+        android:background="@android:drawable/ic_menu_close_clear_cancel"
+        android:clickable="true"
+        android:layout_marginEnd="20dp"
+        android:layout_above="@+id/ratingImg"
         android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:id="@+id/renewItem"
+        android:src="@drawable/renew"
+        android:layout_marginLeft="15dp"
+        android:layout_alignTop="@+id/FBshare"
+        android:layout_toStartOf="@+id/deleteItem"
+        android:layout_marginRight="10dp" />
+
+
+
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:id="@+id/FBshare"
+        android:src="@drawable/facebooklogo"
+        android:layout_above="@+id/ratingImg"
+        android:layout_toStartOf="@+id/renewItem" />
+
 
 </RelativeLayout>
