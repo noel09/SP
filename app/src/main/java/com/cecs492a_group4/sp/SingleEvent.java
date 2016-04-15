@@ -18,23 +18,28 @@ package com.cecs492a_group4.sp;
 
 
 
-import android.graphics.BitmapFactory;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.nfc.Tag;
-import android.os.StrictMode;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.content.Intent;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.text.Html;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Random;
@@ -46,6 +51,13 @@ import org.scribe.oauth.OAuthService;
 import org.scribe.model.OAuthRequest;
 import org.scribe.model.Response;
 import org.scribe.model.Verb;
+
+import com.facebook.CallbackManager;
+import com.facebook.login.LoginManager;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -162,7 +174,7 @@ import javax.xml.transform.Result;
 
 
 public class SingleEvent extends AppCompatActivity implements PlaceSelectionListener, OnClickListener, CompoundButton.OnCheckedChangeListener,
-                        ConnectionCallbacks, OnConnectionFailedListener {
+                        ConnectionCallbacks, OnConnectionFailedListener, PopupMenu.OnMenuItemClickListener {
 
 
     /**
@@ -180,22 +192,37 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
     String response;
     YelpParser yp = new YelpParser();
     URL newurl;
-    String activity, img_url,rating_url ,rating, htmlname, htmldetail;
+    String activity, img_url,rating_url ,web_url;
     Bitmap mIcon_val;
     URL icon_img;
     URL icon_url, url_rating;
     ArrayAdapter<DayEvent> arrayAdapter;
     int limit = 5;
-    //double distance;
     Thread t1, t2;
     ImageView iv;
     TextView tv, tv2;
     Switch locationSwitch;
     public static String finalAddress;
     ListView listView;
-    Button fullButton, singleButton;
+    int globalPosition;
+
+    Button fullButton, singleButton, shareButton;
+    ImageView removeEvent;
+    ShareDialog shareDialog;
+    CallbackManager callbackManager;
+    ShareLinkContent linkContent;
+    SharePhoto photo;
+    SharePhotoContent content;
+    ArrayList<String> bussinessNames = new ArrayList<>(5);
+
+    private ProgressDialog loadingSpinner;
+    private int progressBarStatus = 0;
+    private Handler progressBarbHandler = new Handler();
+
+    boolean fullDayPlan = false;
 
 
+    View senderView;
 
     //---
     public static android.widget.ListView list_view;
@@ -224,6 +251,10 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
         buildGoogleApiClient();
         autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        autocompleteFragment.getView().setBackgroundColor(Color.WHITE);
+
+        shareDialog = new ShareDialog(this);
+        callbackManager = CallbackManager.Factory.create();
 
 
         locationSwitch = (Switch) findViewById(R.id.locationSwitch);
@@ -253,6 +284,9 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
 
         fullButton = (Button) findViewById(R.id.fulldaybtn);
         singleButton = (Button) findViewById(R.id.singleDayBtn);
+        Typeface buttonfont = Typeface.createFromAsset(getAssets(), "PoisonedApples.ttf");
+        fullButton.setTypeface(buttonfont);
+        singleButton.setTypeface(buttonfont);
 
 
         //String htmlexample = "<body><h2>The Result<br></h2>";
@@ -264,9 +298,36 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
 
 
 
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DayEvent clickedevent = dayevent.get(position);
+                try {
+                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(clickedevent.url));
+                    startActivity(myIntent);
+                } catch (Exception e) {
+                    System.out.println("Been in on click method");
+                }
+            }
+        });
+
+
+
+
+
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information
     }
+
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
 
 
     public void onPlaceSelected(Place place) {
@@ -353,7 +414,7 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
 
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
                 View itemview = convertView;
                 //Making sure that there is a view if the view is null
                 if(itemview  == null)
@@ -369,7 +430,7 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
                 title.setText(an_event.getActivitytitle());
 
                 try{
-                    ImageView  icon = (ImageView) itemview.findViewById(R.id.acivity_icon);
+                    ImageView  icon = (ImageView) itemview.findViewById(R.id.activity_icon);
                     icon.setImageBitmap(an_event.Iconimg);
 
 
@@ -378,6 +439,42 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
 
                     TextView distance = (TextView) itemview.findViewById(R.id.distanceId);
                     distance.setText(an_event.distance + " mi");
+                    ImageView deleteButton = (ImageView) itemview.findViewById(R.id.deleteItem);
+                    deleteButton.setOnClickListener(new OnClickListener() {
+                        public void onClick(View v) {
+                            arrayAdapter.remove(dayevent.get(position));
+                            arrayAdapter.notifyDataSetChanged();
+                        }
+                    });
+
+                    ImageView fb = (ImageView) itemview.findViewById(R.id.FBshare);
+                    fb.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                                    .setContentTitle("Take Me Out!")
+                                    .setContentDescription(
+                                            "I'm going to " + dayevent.get(position).getActivitytitle())
+                                    .setImageUrl(Uri.parse(dayevent.get(position).getImageurl().toString()))
+                                            //.setShareHashtag(new ShareHashtag.Builder()
+                                            //      .setHashtag("#ConnectTheWorld")
+                                            //    .build());
+                                            //.setQuote("Connect on a global scale.")
+                                    .build();
+                            shareDialog.show(linkContent);
+
+                        }
+                    });
+
+
+                    ImageView renewButton = (ImageView) itemview.findViewById(R.id.renewItem);
+                    renewButton.setOnClickListener(new OnClickListener() {
+                        public void onClick(View v) {
+                            arrayAdapter.remove(dayevent.get(position));
+                            globalPosition = position;
+                            new RefreshPlan().execute();
+                        }
+                    });
 
 
                 }catch (Exception a)
@@ -395,94 +492,109 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
 
 
 
+    public synchronized void getYelpSearchResult(final int index1,final String searchToken, final String Address) throws InterruptedException {
 
-    private void setNull() {
-        response = null;
-        activity = null;
-        rating = null;
-        img_url = null;
-        rating_url = null;
-        icon_url = null;
-        url_rating = null;
-    }
-
-    public synchronized void getYelpSearchResult(final String searchToken, final String Address) throws InterruptedException {
         Thread thread = new Thread(new Runnable() {
-            int randPick = ran.nextInt(limit);
             @Override
             public void run() {
-             try {
+                int randPick = ran.nextInt(limit);
+                try {
+                    String name = "ldkfldsjkfd";
 
-                 System.out.println("Index: " + randPick);
-                 response = yelp.searchByLocation(searchToken, Address);
-                 System.out.println(searchToken + " gave me this response: " + response);
-                 yp.setResponse(response);
-                 yp.parseBusiness();
+                    do {
+                        randPick = ran.nextInt(limit);
+                        System.out.println("Event number : " + index1);
+                        System.out.println(randPick);
+                        System.out.println("Index: " + randPick);
+                        response = yelp.searchByLocation(searchToken, Address);
+                        System.out.println(searchToken + " gave me this response: " + response);
+                        yp.setResponse(response);
+                        yp.parseBusiness();
+                        int nameSIndex = response.indexOf("\"name\"", 1) + 8;
 
-                 int nameSIndex = response.indexOf("\"name\"",1) + 8;
-                 int imgSIndex = response.indexOf("\"image_url\"",1) + 13;
-                 int ratingSIndex = response.indexOf("\"rating_img_url\"",1) + 18;
-                 //int distanceSIndex = response.indexOf("\"distance\"",1) + 11;
+                        for (int i = 0; i < randPick; i++) {
+                            nameSIndex = response.indexOf("\"name\"", ++nameSIndex) + 8;
+                        }
+                        int nameEIndex = response.indexOf("\",", ++nameSIndex);
+
+                        String tmp = response;
+                        name = tmp.substring(nameSIndex, nameEIndex);
+                        System.out.println(name);
 
 
+                    }while(bussinessNames.contains(name));
 
-                 for (int i = 0; i < randPick; i++) {
-                     nameSIndex = response.indexOf("\"name\"",++nameSIndex) + 8;
-                     imgSIndex = response.indexOf("\"image_url\"",++imgSIndex) + 13;
-                     ratingSIndex = response.indexOf("\"rating_img_url\"",++ratingSIndex) + 18;
-                 //    distanceSIndex = response.indexOf("\"distance\"",++distanceSIndex) + 11;
-                 }
-                 int ratingEIndex = response.indexOf("review_count",++ratingSIndex) - 4;
-                 int nameEIndex = response.indexOf("snippet_image_url",++nameSIndex) - 4;
-                 int imgEIndex = response.indexOf("location",++imgSIndex) - 4;
-                 //int distanceEIndex = response.indexOf("}, {\"is_claimed",++distanceSIndex) - 1;
 
-                 String distance = yp.getBusinessDistance(randPick);
-//               distance = distance.substring(distanceSIndex,distanceEIndex);
-                 System.out.println("Distance: " + distance);
+                    bussinessNames.add(index1,name);
+                    int imgSIndex = response.indexOf("\"image_url\"", 1) + 13;
+                    int ratingSIndex = response.indexOf("\"rating_img_url\"", 1) + 18;
+                    int urlSIndex = response.indexOf("\"mobile_url\"", 1) + 14;
 
-                 double dis = Double.parseDouble(distance);
-                 dis = Math.round(dis/162.61)/ 10.00;
-                 System.out.println("Distance parse: " + dis);
-                 String tmp = response;
-                 tmp = tmp.substring(nameSIndex,nameEIndex);
-                 System.out.println(tmp);
-                 //activity = yp.getBusinessName(randPick);
-                 activity = tmp;
-                 //rating = yp.getBusinessRating(randPick);
-                 //I am going to parse the url my self fucking yelp!
+                    for (int i = 0; i < randPick; i++) {
+                        imgSIndex = response.indexOf("\"image_url\"", ++imgSIndex) + 13;
+                        ratingSIndex = response.indexOf("\"rating_img_url\"", ++ratingSIndex) + 18;
+                        urlSIndex = response.indexOf("\"mobile_url\"", ++urlSIndex) + 14;
+                        //    distanceSIndex = response.indexOf("\"distance\"",++distanceSIndex) + 11;
+                    }
+                    int ratingEIndex = response.indexOf("g\"", ++ratingSIndex) + 1;
+                    int imgEIndex = response.indexOf("g\"", ++imgSIndex) + 1;
+                    int urlEIndex = response.indexOf("rating_img_url", ++urlSIndex) - 4;
+                    System.out.println("Result:" + meters_to_miles(1));
+                    String distance = yp.getBusinessDistance(randPick);
+                    System.out.println("Distance: " + distance);
+                    double dis = Double.parseDouble(distance);
+                    System.out.println("Distance in meteors:" + dis);
+                    System.out.println("Distance in miles:" + meters_to_miles(dis));
+                    BigDecimal bd = new BigDecimal(meters_to_miles(dis));
+                    bd = bd.round(new MathContext(2));
+                    dis = bd.doubleValue();
+                    //distance = distance.substring(distanceSIndex,distanceEIndex);
 
-                // int imgEIndex = response.indexOf("location",imgSIndex) - 4;
+                    //activity = yp.getBusinessName(randPick);
+                    activity = name;
+                    //rating = yp.getBusinessRating(randPick);
+                    //I am going to parse the url my self fucking yelp!
 
-                 String tmp2 = response;
-                 tmp2 = tmp2.substring(imgSIndex,imgEIndex);
-                 System.out.println("mylink " + tmp2);
-                 //img_url = yp.getBusinessImageURL(randPick);
-                 img_url = tmp2;
-                 System.out.println(img_url);
-                 //rating_url = yp.getBusinessRatingUrl(randPick);
-                 String ratingURL = response;
-                 ratingURL = ratingURL.substring(ratingSIndex,ratingEIndex);
-                 System.out.println(ratingURL);
-                 rating_url = ratingURL;
-                 icon_url = new URL(img_url);
-                 url_rating = new URL(rating_url);
-                 dayevent.add(new DayEvent(activity, icon_url, url_rating, searchToken,dis));
-             } catch (JSONException e) {
-                 e.printStackTrace();
-             } catch (MalformedURLException e) {
-                 e.printStackTrace();
-             } catch (IOException e) {
-                 e.printStackTrace();
-             }
+                    // int imgEIndex = response.indexOf("location",imgSIndex) - 4;
+
+                    String tmp2 = response;
+                    tmp2 = tmp2.substring(imgSIndex,imgEIndex);
+                    System.out.println("mylink " + tmp2);
+                    //img_url = yp.getBusinessImageURL(randPick);
+                    img_url = tmp2;
+                    System.out.println(img_url);
+                    //rating_url = yp.getBusinessRatingUrl(randPick);
+                    String ratingURL = response;
+                    ratingURL = ratingURL.substring(ratingSIndex,ratingEIndex);
+                    System.out.println(ratingURL);
+
+
+                    String weburl = response;
+                    weburl = weburl.substring(urlSIndex, urlEIndex);
+                    System.out.println("Event URL: " + weburl);
+                    //System.out.println(ratingURL);
+
+                    web_url = weburl;
+                    rating_url = ratingURL;
+                    icon_url = new URL(img_url);
+                    url_rating = new URL(rating_url);
+                    dayevent.add(index1,new DayEvent(activity, icon_url, url_rating, searchToken,dis,web_url));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
             }
 
         });
         thread.start();
+        //test by removing the while loops (bad practice)
         while (response == null){}
         while (activity == null){}
-        //while (rating == null){}
+        while (web_url== null){}
         while (img_url==null){}
         while(rating_url == null){}
         thread.join();
@@ -490,7 +602,14 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
     }
 
 
+    public double meters_to_miles(double meters){
+        return meters * 0.00062137;
+    }
+
+
     public void onClick(View v) {
+        senderView = v;
+
         if( finalAddress == null ){
             autocompleteFragment.setHint("Enter Address");
         }
@@ -501,44 +620,34 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
             RandRestaurant = ran.nextInt(limit);
             switch (v.getId()) {
                 case R.id.fulldaybtn:
+                    bussinessNames.clear();
                     if (listView.getAdapter().getCount() == 5 || listView.getAdapter().getCount() >= 1) {
                         dayevent.clear();
                         arrayAdapter.notifyDataSetChanged();
 
                     }
+                    fullDayPlan = true;
                     System.out.println("List View has: " + listView.getAdapter().getCount());
-                    try {
-                        System.out.println("Full Day Event");
-                        getYelpSearchResult("Breakfast", finalAddress);
-                        getYelpSearchResult("Activity", finalAddress);
-                        getYelpSearchResult("Lunch", finalAddress);
-                        getYelpSearchResult("Activity", finalAddress);
-                        getYelpSearchResult("Dinner", finalAddress);
 
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    arrayAdapter.notifyDataSetChanged();
                     break;
 
                 case R.id.singleDayBtn:
+                    bussinessNames.clear();
                     if (listView.getAdapter().getCount() >= 1) {
                         dayevent.clear();
                         arrayAdapter.notifyDataSetChanged();
 
                     }
+                    fullDayPlan = false;
                     System.out.println("Single Day");
-                    try {
-                        getYelpSearchResult("Restaurant", finalAddress);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    arrayAdapter.notifyDataSetChanged();
+
                     break;
             }
+            new GeneratePlanTask().execute();
         }
         fullButton.setEnabled(true);
         singleButton.setEnabled(true);
+        progressBarStatus = 100;
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -663,6 +772,137 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
 
     }
 
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        popup.setOnMenuItemClickListener(this);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.menu, popup.getMenu());
+        popup.show();
+
+    }
+
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.radius:
+
+                return true;
+
+            case R.id.signout:
+                LoginManager.getInstance().logOut();
+                finish();
+                return true;
+
+            case R.id.about:
+                Intent popWindow = new Intent(this, Pop.class);
+                this.startActivity(popWindow);
+                return true;
+
+            default:
+
+                return false;
+        }
+    }
+
+
+
+    public class GeneratePlanTask extends AsyncTask<Void, Void, Void>{
+        protected void onPreExecute(){
+            progressBarStatus = 0;
+
+            loadingSpinner = new ProgressDialog(senderView.getContext());
+            loadingSpinner.setCancelable(false);
+            loadingSpinner.setMessage("Generating a plan ...");
+            loadingSpinner.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            loadingSpinner.setProgress(0);
+            loadingSpinner.setMax(100);
+            loadingSpinner.show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            if(fullDayPlan) {
+                try {
+                    System.out.println("Full Day Event");
+                    getYelpSearchResult(0,"Breakfast", finalAddress);
+                    getYelpSearchResult(1,"Activity", finalAddress);
+                    getYelpSearchResult(2,"Lunch", finalAddress);
+                    getYelpSearchResult(3,"Activity", finalAddress);
+                    getYelpSearchResult(4,"Dinner", finalAddress);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                try {
+                    getYelpSearchResult(0,"Restaurant", finalAddress);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            arrayAdapter.notifyDataSetChanged();
+            loadingSpinner.dismiss();
+        }
+    }
+
+    private class RefreshPlan extends AsyncTask<Void, Void, Void>{
+        protected void onPreExecute(){
+            progressBarStatus = 0;
+
+            loadingSpinner = new ProgressDialog(senderView.getContext());
+            loadingSpinner.setCancelable(false);
+            loadingSpinner.setMessage("Replacing a business ...");
+            loadingSpinner.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            loadingSpinner.setProgress(0);
+            loadingSpinner.setMax(100);
+            loadingSpinner.show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            if (globalPosition % 2 != 0) {
+                try {
+                    getYelpSearchResult(globalPosition, "Activity", finalAddress);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } else if (globalPosition == 0) {
+                try {
+                    getYelpSearchResult(globalPosition, "Breakfast", finalAddress);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } else if (globalPosition == 2) {
+                try {
+                    getYelpSearchResult(globalPosition, "Lunch", finalAddress);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } else if (globalPosition == 4) {
+                try {
+                    getYelpSearchResult(globalPosition, "Dinner", finalAddress);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            arrayAdapter.notifyDataSetChanged();
+            loadingSpinner.dismiss();
+        }
+    }
 }
 
 

@@ -3,95 +3,125 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingBottom="0dp"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="0dp"
     android:background="@color/Madison"
     tools:context="com.cecs492a_group4.sp.login"
     android:theme="@android:style/Theme.Holo">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Email Address"
-        android:id="@+id/textView"
-        android:layout_marginTop="202dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
+    <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/TFemailLogin"
-        android:layout_alignParentStart="true"
-        android:hint="Enter Your Email Address"
-        android:singleLine="true"
-        android:inputType="textEmailAddress"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentRight="true" />
+        android:scrollbars="none"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:id="@+id/scrollView">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Email Address"
+                android:id="@+id/textView"
+                android:layout_marginTop="212dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Password"
-        android:id="@+id/textView2"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/TFemailLogin"
-        android:layout_alignParentRight="true" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/TFemailLogin"
+                android:layout_alignParentStart="true"
+                android:hint="Enter Your Email Address"
+                android:singleLine="true"
+                android:inputType="textEmailAddress"
+                android:layout_below="@+id/textView"
+                android:layout_alignParentRight="true"/>
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/TFloginPassword"
-        android:layout_alignParentStart="true"
-        android:hint="Enter Your Password"
-        android:inputType="textPassword"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentRight="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Password"
+                android:id="@+id/textView2"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/TFemailLogin"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentRight="true" />
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:id="@+id/BLogin"
-        android:layout_alignParentStart="true"
-        android:background="@color/White_Smoke"
-        android:textColor="@color/Ebony_Clay"
-        android:onClick="onButtonClick"
-        android:layout_below="@+id/TFloginPassword"
-        android:layout_alignParentRight="true" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/TFloginPassword"
+                android:layout_alignParentStart="true"
+                android:hint="Enter Your Password"
+                android:inputType="textPassword"
+                android:layout_below="@+id/textView2"
+                android:layout_alignParentRight="true" />
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        android:id="@+id/BTregister"
-        android:onClick="onButtonClick"
-        android:background="@color/White_Smoke"
-        android:textColor="@color/Ebony_Clay"
-        android:layout_marginTop="15dp"
-        android:layout_below="@+id/BLogin"
-        android:layout_alignParentStart="true" />
+            <LinearLayout
+                android:id="@+id/ButtonsLinearLayout"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_marginTop="55dp"
+                android:layout_alignTop="@+id/FBlogin_button" >
+                <Button
+                    android:layout_width= "fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight = "1"
+                    android:textSize="21sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentStart="true"
+                    android:text="Login"
+                    android:id="@+id/BLogin"
+                    android:background="@color/Soft_Red"
+                    android:textColor="@color/White"
+                    android:onClick="onButtonClick"/>
 
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/FBlogin_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/BTregister"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp"
-        android:layout_alignEnd="@+id/BTregister" />
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight = "1"
+                    android:text="Register"
+                    android:id="@+id/BTregister"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:onClick="onButtonClick"
+                    android:background="@color/Gossip"
+                    android:textColor="@color/White"
+                    android:textSize="21sp"
+                    android:layout_alignTop="@+id/BLogin" />
+            </LinearLayout>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/iViewLogo"
-        android:src="@drawable/logo"
-        android:layout_above="@+id/TFemailLogin"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="46dp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/iViewLogo"
+                android:src="@drawable/logo"
+                android:layout_above="@+id/TFemailLogin"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="52dp"
+                android:layout_alignParentTop="true" />
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/FBlogin_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/TFloginPassword"
+                android:layout_marginTop="55dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textSize="17sp" />
+
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>
