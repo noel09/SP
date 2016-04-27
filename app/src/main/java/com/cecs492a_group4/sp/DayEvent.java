@@ -2,6 +2,7 @@ package com.cecs492a_group4.sp;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 
 import java.io.IOException;
 import java.net.URL;
@@ -60,3 +61,4 @@ public class DayEvent {
 
 
 }
+
