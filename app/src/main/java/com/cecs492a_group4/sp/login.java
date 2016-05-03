@@ -31,6 +31,7 @@ import com.facebook.AccessToken;
 public class login extends AppCompatActivity {
 
 
+    //---------------------------------------Declarations---------------------------------------
     Firebase mRef;
     public static final String DB_URL = "https://incandescent-heat-931.firebaseio.com/";
     private CallbackManager callbackManager;
@@ -114,15 +115,36 @@ public class login extends AppCompatActivity {
 
                 @Override
                 public void onAuthenticationError(FirebaseError firebaseError) {
-                    p.setText("");
-                    p.setHint("Wrong Password");
-                    p.setHintTextColor(Color.RED);
+                    switch (firebaseError.getCode()){
+                        case FirebaseError.INVALID_EMAIL:
+                            p.setText("");
+                            p.setHintTextColor(Color.RED);
+                            p.setHint("Invalid Email Address");
+                            break;
+                        case FirebaseError.INVALID_PASSWORD:
+                            p.setText("");
+                            p.setHintTextColor(Color.RED);
+                            p.setHint("Invalid Password");
+                            break;
+                        case FirebaseError.DISCONNECTED:
+                            p.setText("");
+                            p.setHintTextColor(Color.RED);
+                            p.setHint("Please Check Your Connection");
+                            break;
+                        case FirebaseError.NETWORK_ERROR:
+                            p.setText("");
+                            p.setHintTextColor(Color.RED);
+                            p.setHint("Please Check Your Connection");
+                            break;
+                        default:
+                            p.setText("");
+                            p.setHintTextColor(Color.RED);
+                            p.setHint("Please Check Your Login Info");
+                            break;
+                    }//End Switch
                     Log.d("Result: ", "Login Failed");
                 }
             });
-
         }
     }
-
-
 }

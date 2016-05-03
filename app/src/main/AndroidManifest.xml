@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:installLocation="preferExternal"
     package="com.cecs492a_group4.sp">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -8,15 +9,14 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:icon="@mipmap/my_launcher"
+        android:label="Take Me Out"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
-
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -53,8 +53,6 @@
     <provider android:authorities="com.facebook.app.FacebookContentProvider232975713720353"
         android:name="com.facebook.FacebookContentProvider"
         android:exported="true" />
-
-
 
 
 </manifest>
