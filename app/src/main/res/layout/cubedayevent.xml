@@ -80,6 +80,31 @@
         android:layout_above="@+id/ratingImg"
         android:layout_alignParentEnd="true" />
 
+
+
+
+    <ImageButton
+        android:id="@+id/call"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="right|center_vertical"
+        android:background="@android:drawable/sym_action_call"
+        android:clickable="true"
+        android:layout_alignTop="@+id/ratingImg"
+        android:layout_alignStart="@+id/FBshare" />
+
+    <ImageButton
+        android:id="@+id/dir"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="right|center_vertical"
+        android:background="@android:drawable/ic_menu_compass"
+        android:clickable="true"
+        android:layout_alignTop="@+id/call"
+        android:layout_alignStart="@+id/renewItem" />
+
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
