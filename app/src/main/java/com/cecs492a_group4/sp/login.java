@@ -109,13 +109,13 @@ public class login extends AppCompatActivity {
                 public void onAuthenticated(AuthData authData) {
                     System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
                     Log.d("Result: ", "Succesfully Logged in");
-                    Intent main = new Intent(login.this,SingleEvent.class);
+                    Intent main = new Intent(login.this, SingleEvent.class);
                     startActivity(main);
                 }
 
                 @Override
                 public void onAuthenticationError(FirebaseError firebaseError) {
-                    switch (firebaseError.getCode()){
+                    switch (firebaseError.getCode()) {
                         case FirebaseError.INVALID_EMAIL:
                             p.setText("");
                             p.setHintTextColor(Color.RED);
@@ -145,6 +145,10 @@ public class login extends AppCompatActivity {
                     Log.d("Result: ", "Login Failed");
                 }
             });
+        }
+        if (v.getId() == R.id.Guest){
+            Intent i = new Intent(this,SingleEvent.class);
+            startActivity(i);
         }
     }
 }

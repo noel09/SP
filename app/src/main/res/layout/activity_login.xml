@@ -124,4 +124,17 @@
 
         </RelativeLayout>
     </ScrollView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login As Guest"
+        android:id="@+id/Guest"
+        android:layout_below="@+id/scrollView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:textSize="15dp"
+        android:onClick="onButtonClick"
+        android:linksClickable="true" />
 </RelativeLayout>

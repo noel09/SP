@@ -519,14 +519,16 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
                     String name = "ldkfldsjkfd";
                     int full = 0;
                     do {
+
                         randPick = ran.nextInt(limit);
                         System.out.println("Event number : " + index1);
                         System.out.println(randPick);
                         System.out.println("Index: " + randPick);
                         response = yelp.searchByLocation(searchToken, Address, SingleEvent.currentRadius);
+                        System.out.println("The current radius : " + SingleEvent.currentRadius);
                         System.out.println(searchToken + " gave me this response: " + response);
                         yp.setResponse(response);
-                        yp.parseBusiness();
+                       // yp.parseBusiness();
 
                         int nameSIndex = response.indexOf("\"name\"", 1) + 8;
 
@@ -539,42 +541,58 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
                         name = tmp.substring(nameSIndex, nameEIndex);
                         System.out.println(name);
                         full++;
-                        if(full >= 4){
+                        if (full >= 4) {
                             full = 0;
                             bussinessNames.clear(); //no more options reset array
                         }
                     } while (bussinessNames.contains(name));
 
-
-                    bussinessNames.add(index1, name);
+                    try {
+                        bussinessNames.add(index1, name);
+                    } catch (IndexOutOfBoundsException e){
+                        System.out.println("Array size " + bussinessNames.size());
+                        bussinessNames.clear();
+                    }
                     int imgSIndex = response.indexOf("\"image_url\"", 1) + 13;
                     int ratingSIndex = response.indexOf("\"rating_img_url\"", 1) + 18;
                     int urlSIndex = response.indexOf("\"mobile_url\"", 1) + 14;
                     int phoneSIndex = response.indexOf("\"phone\":", 1) + 9;
-                    int addressSIndex = response.indexOf("\"display_address\"",1) + 19;
+                    int addressSIndex = response.indexOf("\"display_address\"", 1) + 19;
+                    int distanceSIndex = response.indexOf("\"distance\"", 1) + 12;
+                    System.out.println("Start index :" + distanceSIndex);
                     for (int i = 0; i < randPick; i++) {
+
                         imgSIndex = response.indexOf("\"image_url\"", ++imgSIndex) + 13;
                         ratingSIndex = response.indexOf("\"rating_img_url\"", ++ratingSIndex) + 18;
                         urlSIndex = response.indexOf("\"mobile_url\"", ++urlSIndex) + 14;
                         phoneSIndex = response.indexOf("\"phone\":", ++phoneSIndex) + 9;
-                        addressSIndex = response.indexOf("\"display_address\"",++addressSIndex) + 19;
+                        addressSIndex = response.indexOf("\"display_address\"", ++addressSIndex) + 19;
+                        distanceSIndex = response.indexOf("\"distance\"", ++distanceSIndex) + 12;
                     }
 
                     int ratingEIndex = response.indexOf("g\"", ++ratingSIndex) + 1;
                     int imgEIndex = response.indexOf("g\"", ++imgSIndex) + 1;
                     int phoneEIndex = response.indexOf("\",", ++phoneSIndex);
                     int urlEIndex = response.indexOf("rating_img_url", ++urlSIndex) - 4;
-                    int addressEIndex = response.indexOf("\"], ",++addressSIndex) + 1;
+                    int addressEIndex = response.indexOf("\"], ", ++addressSIndex) + 1;
 
-                    System.out.println("Result:" + meters_to_miles(1));
-                    String distance = yp.getBusinessDistance(randPick);
+
+                    //System.out.println("distance = " + response.substring(distanceSIndex,distanceSIndex + 9));
+                    //String distance = yp.getBusinessDistance(randPick);
+                    String distance = response.substring(distanceSIndex, distanceSIndex + 9);
                     System.out.println("Distance: " + distance);
-                    double dis = Double.parseDouble(distance);
+                    double dis;
+                    try {
+                        dis = Double.parseDouble(distance);
+                    }catch (NumberFormatException e){
+                        dis = 0.0;
+                    }
                     System.out.println("Distance in meteors:" + dis);
                     System.out.println("Distance in miles:" + meters_to_miles(dis));
                     BigDecimal bd = new BigDecimal(meters_to_miles(dis));
                     bd = bd.round(new MathContext(2));
                     dis = bd.doubleValue();
+                    System.out.println("dis after conversion " + dis);
                     //distance = distance.substring(distanceSIndex,distanceEIndex);
 
                     //activity = yp.getBusinessName(randPick);
@@ -605,14 +623,36 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
 
                     String eventaddress = response;
                     eventaddress = eventaddress.substring(addressSIndex, addressEIndex);
-                    System.out.println("default Event Address"  + eventaddress);
-                    int streaddSindex  = eventaddress.indexOf("\"")+ 1;
-                    int streaddEindex = eventaddress.indexOf("\",");
 
-                    int cityaddSindex = eventaddress.indexOf("\", \"")+ 4 ;
-                    String streetadd = eventaddress.substring(streaddSindex, streaddEindex);
+                    System.out.println("default Event Address" + eventaddress);
+
+                    int streaddSindex = eventaddress.indexOf("\"") + 1;
+
+                        int streaddEindex = eventaddress.indexOf("\",");
+                        int cityaddSindex = 1;
+                        try {
+                            cityaddSindex = eventaddress.indexOf("\", \"") + 4;
+                        } catch (StringIndexOutOfBoundsException e) {
+                            cityaddSindex = 0;
+                            System.out.println("No city");
+                        }
+
+                    String streetadd = " ";
+                    try {
+                        streetadd = eventaddress.substring(streaddSindex, streaddEindex);
+                    }catch (StringIndexOutOfBoundsException e){
+                        if (!Character.isDigit(eventaddress.charAt(0))) {
+                            System.out.println("Faulty address");
+                            streetadd = " ";
+                        }
+                    }
                     System.out.println("Street address:" + streetadd);
-                    String cityadd = eventaddress.substring(cityaddSindex).replace("\"","");
+                    String cityadd;
+                    if (cityaddSindex != 0)
+                        cityadd = eventaddress.substring(cityaddSindex).replace("\"", "");
+                    else
+                        cityadd = " ";
+
                     System.out.println("City location: " + cityadd);
                     eventaddress = streetadd +" "+ cityadd;
                     System.out.println("adjusted Event Address: " + eventaddress);
@@ -625,9 +665,13 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
                     rating_url = ratingURL;
                     icon_url = new URL(img_url);
                     url_rating = new URL(rating_url);
-                    dayevent.add(index1, new DayEvent(activity, icon_url, url_rating, searchToken, dis, web_url, phoneNum, event_address));
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    try {
+                        dayevent.add(index1, new DayEvent(activity, icon_url, url_rating, searchToken, dis, web_url, phoneNum, event_address));
+                    } catch (IndexOutOfBoundsException e){
+                        System.out.println("Size of day event " + dayevent.size());
+                    }
+                //} catch (JSONException e) {
+                    //e.printStackTrace();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
