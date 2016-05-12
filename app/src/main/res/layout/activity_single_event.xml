@@ -23,8 +23,7 @@
         android:background="@color/Madison"
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="com.cecs492a_group4.sp.SingleEvent"
-        android:weightSum = "1"
-        android:screenOrientation = "portrait">
+        android:weightSum = "1">
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

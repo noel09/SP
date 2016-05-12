@@ -237,6 +237,7 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
     //testing putting address in a temp address charsequence
     public static CharSequence address;
     public static String addressString;
+    public static int currentRadius = 10;
 
 
     public GoogleApiClient mGoogleApiClient;
@@ -522,7 +523,7 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
                         System.out.println("Event number : " + index1);
                         System.out.println(randPick);
                         System.out.println("Index: " + randPick);
-                        response = yelp.searchByLocation(searchToken, Address);
+                        response = yelp.searchByLocation(searchToken, Address, SingleEvent.currentRadius);
                         System.out.println(searchToken + " gave me this response: " + response);
                         yp.setResponse(response);
                         yp.parseBusiness();
@@ -851,6 +852,10 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
 
     }
 
+
+
+
+
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         popup.setOnMenuItemClickListener(this);
@@ -863,7 +868,8 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.radius:
-
+                Intent popRadius = new Intent(this, PopRadius.class);
+                this.startActivity(popRadius);
                 return true;
 
             case R.id.signout:
@@ -874,6 +880,12 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
             case R.id.about:
                 Intent popWindow = new Intent(this, Pop.class);
                 this.startActivity(popWindow);
+                return true;
+
+            case R.id.tutorial:
+
+                //put stuff here
+
                 return true;
 
             default:
