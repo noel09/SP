@@ -76,6 +76,7 @@ public class Yelp {
         //Validate radius
         if(radius > 24.85)
             radius = 40000;
+<<<<<<< Updated upstream
         else if ( radius < 1) {
             radius = 1609.34;
         }
