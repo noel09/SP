@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/White">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imgTutorial"
+                android:id="@+id/btnTutBack"
+                android:layout_marginTop="430dp"
+                android:text="Back"
+                android:background="@color/Malibu"/>
+
+            <ImageView
+                android:layout_width="300dp"
+                android:layout_height="400dp"
+                android:id="@+id/imgTutorial"
+                android:layout_gravity="center_horizontal|top"
+                android:src="@drawable/custom_addr01"
+                android:layout_marginTop="30dp"/>
+
+            <Button
+                android:id="@+id/btnTutNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imgTutorial"
+                android:layout_marginTop="430dp"
+                android:layout_gravity="right"
+                android:text="Next"
+                android:background="@color/Malibu"/>
+        </FrameLayout>
+    </ScrollView>
+</RelativeLayout>

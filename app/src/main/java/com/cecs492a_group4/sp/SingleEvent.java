@@ -928,7 +928,8 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
 
             case R.id.tutorial:
 
-                //put stuff here
+                Intent tutorial = new Intent(this, Tutorial.class);
+                this.startActivity(tutorial);
 
                 return true;
 
