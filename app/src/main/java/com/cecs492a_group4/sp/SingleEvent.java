@@ -180,7 +180,7 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
 
 
     /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * ATTENTION:  This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
 
@@ -587,7 +587,7 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
                     }catch (NumberFormatException e){
                         dis = 0.0;
                     }
-                    System.out.println("Distance in meteors:" + dis);
+                    System.out.println("Distance in meters:" + dis);
                     System.out.println("Distance in miles:" + meters_to_miles(dis));
                     BigDecimal bd = new BigDecimal(meters_to_miles(dis));
                     bd = bd.round(new MathContext(2));
