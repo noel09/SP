@@ -60,6 +60,8 @@
             android:theme="@style/AppTheme.CustomTheme">
         </activity>
 
+        <activity android:name=".Tutorial"
+            android:screenOrientation="portrait"/>
     </application>
 
     <provider android:authorities="com.facebook.app.FacebookContentProvider232975713720353"

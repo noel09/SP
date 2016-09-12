@@ -69,7 +69,7 @@
                 android:id="@+id/ButtonsLinearLayout"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:layout_marginTop="55dp"
+                android:layout_marginTop="40dp"
                 android:layout_alignTop="@+id/FBlogin_button" >
                 <Button
                     android:layout_width= "fill_parent"
@@ -117,7 +117,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_alignParentStart="true"
                 android:layout_alignTop="@+id/TFloginPassword"
-                android:layout_marginTop="55dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:textSize="17sp" />
