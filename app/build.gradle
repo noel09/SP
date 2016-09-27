@@ -28,6 +28,9 @@ android {
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://jitpack.io"
+    }
 }
 
 dependencies {
@@ -43,4 +46,6 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    compile 'com.yalantis:sidemenu:1.0'
+    compile ('com.github.ozodrukh:CircularReveal:2.0.1@aar')
 }

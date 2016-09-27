@@ -477,14 +477,13 @@ public class SingleEvent extends AppCompatActivity implements PlaceSelectionList
                 ImageView callButton = (ImageView) itemview.findViewById(R.id.call);
                 callButton.setOnClickListener(new OnClickListener() {
                     public void onClick(View v) {
-                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
                         callIntent.setData(Uri.parse("tel:" + dayevent.get(position).phoneNumber));
                         try{
                             startActivity(callIntent);
                         } catch (android.content.ActivityNotFoundException ex){
                             Toast.makeText(getApplicationContext(),"Call permission denied ",Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
 
