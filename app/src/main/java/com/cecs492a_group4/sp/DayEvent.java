@@ -16,14 +16,17 @@ public class DayEvent {
     String activitytitle;
     URL Imageurl, rating_url ;
     Bitmap Iconimg, ratingimg;
-    String rating, url;
+    String rating, url, phoneNumber, address;
 
 
-    public DayEvent(String activity_title, URL activity_iconURL, URL activity_rating, String activity_criteria, double distance, String webURL) throws IOException {
+
+    public DayEvent(String activity_title, URL activity_iconURL, URL activity_rating, String activity_criteria, double distance, String webURL, String number, String address) throws IOException {
         super();
         this.activitytitle = activity_title;
         this.Imageurl = activity_iconURL;
         this.url = webURL;
+        this.phoneNumber = number;
+        this.address = address;
         try{
 
             Iconimg = BitmapFactory.decodeStream(Imageurl.openConnection().getInputStream());
@@ -57,7 +60,6 @@ public class DayEvent {
     public Bitmap getIconimg() { return Iconimg; }
 
     public String getCriteria() { return criteria; }
-
 
 
 }

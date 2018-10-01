@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:installLocation="preferExternal"
+    android:installLocation="auto"
     package="com.cecs492a_group4.sp">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -26,19 +26,24 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation = "portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".login"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Register" />
-        <activity android:name=".SingleEvent"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation = "portrait"/>
+        <activity android:name=".Register"
+            android:screenOrientation = "portrait"/>
+        <activity android:name=".SingleEvent"
+            android:screenOrientation = "portrait"></activity>
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -48,6 +53,15 @@
             android:name = ".Pop"
             android:theme="@style/AppTheme.CustomTheme">
         </activity>
+
+
+        <activity
+            android:name = ".PopRadius"
+            android:theme="@style/AppTheme.CustomTheme">
+        </activity>
+
+        <activity android:name=".Tutorial"
+            android:screenOrientation="portrait"/>
     </application>
 
     <provider android:authorities="com.facebook.app.FacebookContentProvider232975713720353"

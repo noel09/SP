@@ -7,4 +7,8 @@
     <string name="aboutstring">About</string>
 
     <string name="authors_version">Authors\n\nAbdullah Alsheikh\nImanuel Kurniawan\nMuhannad Al Hasani\nRohit Sehdev\n\n\n\nVersion 1.0</string>
+
+
+
+    <string name="custom_addr_title">USING A CUSTOM ADDRESS</string>
 </resources>
